@@ -1,4 +1,11 @@
+const Animal = require("../models/animal.model")
+
 const Query = {
+  animals: async (parent, args, context) => {
+    const animals = await Animal.find({}).exec()
+    return animals
+  },
+
   mainCards: (parent, args, {mainCards}) => mainCards,
   categories: (parent, args, {categories}) => categories,
   category: (parent, {slug}, {categories}) => {
@@ -8,7 +15,7 @@ const Query = {
     )
     return categoryToFind
   },
-  animals: (parent, args, {animals}) => animals,
+
   animal: (parent, {slug}, {animals}) => {
     console.log(slug)
     let animalToFind = animals.find(

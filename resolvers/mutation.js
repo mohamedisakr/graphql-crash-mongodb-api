@@ -1,6 +1,15 @@
-// const {v4} = require('uuid')
+const Animal = require("../models/animal.model")
+const Category = require("../models/category.model")
+
 const Mutation = {
-  addAnimal: (parent, args, {animals}) => {
+  addCategory: async (parent, args, context, info) => {
+    const {image, slug, category, animals} = args
+    const newCategory = new Category({image, slug, category, animals})
+    const savedCategory = await newCategory.save()
+    return savedCategory
+  },
+
+  addAnimal: async (parent, args, context, info) => {
     const {
       image,
       title,
@@ -13,8 +22,7 @@ const Mutation = {
       category,
     } = args
 
-    const newAnimal = {
-      // id: v4(),
+    const newAnimal = new Animal({
       image,
       title,
       rating,
@@ -24,10 +32,13 @@ const Mutation = {
       stock,
       onSale,
       category,
-    }
+    })
 
-    animals.push(newAnimal)
-    return newAnimal
+    const theCategory = await Category.findById(newAnimal.category)
+    const savedAnimal = await newAnimal.save()
+    theCategory.animals = theCategory.animals.concat(savedAnimal._id)
+    await theCategory.save()
+    return savedAnimal
   },
 
   removeAnimal: (parent, args, {animals}) => {
