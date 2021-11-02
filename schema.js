@@ -36,27 +36,27 @@ const typeDefs = gql`
     category(slug: String!): Category
   }
 
-  type Mutation {
-    addCategory(
-      image: String!
-      category: String!
-      slug: String!
-      animals: [Animal]
-    ): Category
+  # type Mutation {
+  #   addCategory(
+  #     image: String!
+  #     category: String!
+  #     slug: String!
+  #     animals: [Animal]
+  #   ): Category
 
-    addAnimal(
-      image: String!
-      title: String!
-      rating: Float
-      price: String!
-      description: [String!]!
-      slug: String!
-      stock: String!
-      onSale: Boolean
-      category: String!
-    ): Animal
+  #   addAnimal(
+  #     image: String!
+  #     title: String!
+  #     rating: Float
+  #     price: String!
+  #     description: [String!]!
+  #     slug: String!
+  #     stock: String!
+  #     onSale: Boolean
+  #     category: String!
+  #   ): Animal
 
-    removeAnimal(id: ID!): Boolean!
-  }
+  #   removeAnimal(id: ID!): Boolean!
+  # }
 `
 module.exports = typeDefs
