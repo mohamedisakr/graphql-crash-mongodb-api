@@ -27,7 +27,7 @@ const resolvers = {
         return []
       }
     },
-    animal: async (parent, {id}, context) => {
+    byId: async (parent, {id}, context) => {
       return Animal.findById(id).exec()
     },
 
