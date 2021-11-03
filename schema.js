@@ -24,39 +24,39 @@ const typeDefs = gql`
     image: String!
     category: String!
     slug: String!
-    animals: [Animal]
+    animals: [Animal]!
   }
 
   type Query {
     mainCards: [MainCard]
     animals: [Animal]
     animal(slug: String!): Animal
-    byId(id: ID!): Animal
+    animalById(id: ID!): Animal
     categories: [Category!]!
     category(slug: String!): Category
   }
 
-  # type Mutation {
-  #   addCategory(
-  #     image: String!
-  #     category: String!
-  #     slug: String!
-  #     animals: [Animal]
-  #   ): Category
+  type Mutation {
+    addCategory(
+      image: String!
+      category: String!
+      slug: String!
+      animals: [String]!
+    ): Category
 
-  #   addAnimal(
-  #     image: String!
-  #     title: String!
-  #     rating: Float
-  #     price: String!
-  #     description: [String!]!
-  #     slug: String!
-  #     stock: String!
-  #     onSale: Boolean
-  #     category: String!
-  #   ): Animal
+    #   addAnimal(
+    #     image: String!
+    #     title: String!
+    #     rating: Float
+    #     price: String!
+    #     description: [String!]!
+    #     slug: String!
+    #     stock: String!
+    #     onSale: Boolean
+    #     category: String!
+    #   ): Animal
 
-  #   removeAnimal(id: ID!): Boolean!
-  # }
+    #   removeAnimal(id: ID!): Boolean!
+  }
 `
 module.exports = typeDefs

@@ -6,6 +6,7 @@ const Mutation = require("./resolvers/mutation")
 const Query = require("./resolvers/query")
 const Category = require("./models/category.model")
 const Animal = require("./models/animal.model")
+
 // const Category = require("./resolvers/category")
 // const Animal = require("./resolvers/animal")
 
@@ -27,61 +28,45 @@ const resolvers = {
         return []
       }
     },
-    byId: async (parent, {id}, context) => {
-      return Animal.findById(id).exec()
+    animalById: async (parent, {id}, context) => {
+      console.log(`animal id : ${id}`)
+      const foundAnimal = await Animal.findById(id).exec()
+      console.log(`animal found : ${foundAnimal}`)
+      return foundAnimal
     },
-
-    // movies: async () => {
-    //   try {
-    //     const allMovies = await Movie.find()
-    //     return allMovies
-    //   } catch (e) {
-    //     console.log("e", e)
-    //     return []
-    //   }
-    // },
-
-    // movie: async (obj, {id}) => {
-    //   try {
-    //     const foundMovie = await Movie.findById(id)
-    //     return foundMovie
-    //   } catch (e) {
-    //     console.log("e", e)
-    //     return {}
-    //   }
-    // },
+    categories: async (parent, args, context) => {
+      try {
+        const allCategories = await Category.find({}).exec()
+        return allCategories
+      } catch (e) {
+        console.log("e", e)
+        return []
+      }
+    },
   },
-
-  // Movie: {
-  //   actor: (obj, arg, context) => {
-  //     // DB Call
-  //     const actorIds = obj.actor.map((actor) => actor.id)
-  //     const filteredActors = actors.filter((actor) => {
-  //       return actorIds.includes(actor.id)
-  //     })
-  //     return filteredActors
-  //   },
-  // },
-
-  // Mutation: {
-  //   addMovie: async (obj, {movie}, {userId}) => {
-  //     try {
-  //       if (userId) {
-  //         // Do mutation and of database stuff
-  //         const newMovie = await Movie.create({
-  //           ...movie,
-  //         })
-  //         pubsub.publish(MOVIE_ADDED, {movieAdded: newMovie})
-  //         const allMovies = await Movie.find()
-  //         return allMovies
-  //       }
-  //       return movies
-  //     } catch (e) {
-  //       console.log("e", e)
-  //       return []
-  //     }
-  //   },
-  // },
+  Mutation: {
+    addCategory: async (parent, args, context) => {
+      const newCategory = await Category.create({...args})
+      console.log(args)
+      return newCategory
+    },
+  },
+  Category: {
+    id: ({_id, id}) => _id || id,
+    animals: async (parent, args, context) => {
+      console.log(parent)
+      const animalsInCategory = await Animal.find({category: parent.id})
+      return animalsInCategory
+    },
+  },
+  Animal: {
+    id: ({_id, id}) => _id || id,
+    category: async (parent, args, context) => {
+      // console.log(parent)
+      const categoryForAnimal = await Category.findOne({id: parent.id})
+      return categoryForAnimal
+    },
+  },
 }
 
 const startServer = async () => {
@@ -155,3 +140,32 @@ const startServer = async () => {
 
 startServer()
 */
+
+// addMovie: async (obj, {movie}, {userId}) => {
+//   try {
+//     if (userId) {
+//       // Do mutation and of database stuff
+//       const newMovie = await Movie.create({
+//         ...movie,
+//       })
+//       pubsub.publish(MOVIE_ADDED, {movieAdded: newMovie})
+//       const allMovies = await Movie.find()
+//       return allMovies
+//     }
+//     return movies
+//   } catch (e) {
+//     console.log("e", e)
+//     return []
+//   }
+// },
+
+// Movie: {
+//   actor: (obj, arg, context) => {
+//     // DB Call
+//     const actorIds = obj.actor.map((actor) => actor.id)
+//     const filteredActors = actors.filter((actor) => {
+//       return actorIds.includes(actor.id)
+//     })
+//     return filteredActors
+//   },
+// },
