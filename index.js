@@ -2,72 +2,7 @@ const express = require("express")
 const {ApolloServer} = require("apollo-server-express")
 const mongoose = require("mongoose")
 const typeDefs = require("./schema")
-const Mutation = require("./resolvers/mutation")
-const Query = require("./resolvers/query")
-const Category = require("./models/category.model")
-const Animal = require("./models/animal.model")
-
-// const Category = require("./resolvers/category")
-// const Animal = require("./resolvers/animal")
-
-// const resolvers = {
-//   Query,
-//   Mutation,
-//   Category,
-//   Animal,
-// }
-
-const resolvers = {
-  Query: {
-    animals: async (parent, args, context) => {
-      try {
-        const allAnimals = await Animal.find({}).exec()
-        return allAnimals
-      } catch (e) {
-        console.log("e", e)
-        return []
-      }
-    },
-    animalById: async (parent, {id}, context) => {
-      console.log(`animal id : ${id}`)
-      const foundAnimal = await Animal.findById(id).exec()
-      console.log(`animal found : ${foundAnimal}`)
-      return foundAnimal
-    },
-    categories: async (parent, args, context) => {
-      try {
-        const allCategories = await Category.find({}).exec()
-        return allCategories
-      } catch (e) {
-        console.log("e", e)
-        return []
-      }
-    },
-  },
-  Mutation: {
-    addCategory: async (parent, args, context) => {
-      const newCategory = await Category.create({...args})
-      console.log(args)
-      return newCategory
-    },
-  },
-  Category: {
-    id: ({_id, id}) => _id || id,
-    animals: async (parent, args, context) => {
-      console.log(parent)
-      const animalsInCategory = await Animal.find({category: parent.id})
-      return animalsInCategory
-    },
-  },
-  Animal: {
-    id: ({_id, id}) => _id || id,
-    category: async (parent, args, context) => {
-      // console.log(parent)
-      const categoryForAnimal = await Category.findOne({id: parent.id})
-      return categoryForAnimal
-    },
-  },
-}
+const resolvers = require("./resolvers")
 
 const startServer = async () => {
   const app = express()
@@ -99,6 +34,13 @@ const startServer = async () => {
 }
 
 startServer()
+
+// const resolvers = {
+//   Query,
+//   Mutation,
+//   Category,
+//   Animal,
+// }
 
 // old code with separate query, resolvers, and schema
 /*
