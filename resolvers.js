@@ -1,9 +1,16 @@
-const Category = require("./models/category.model")
-const Animal = require("./models/animal.model")
-
 const resolvers = {
   Query: {
-    animals: async (parent, args, context) => {
+    categories: async (parent, args, {Category}) => {
+      console.log(Category)
+      try {
+        const allCategories = await Category.find({}).exec()
+        return allCategories
+      } catch (e) {
+        console.error(e)
+        return []
+      }
+    },
+    animals: async (parent, args, {Animal}) => {
       try {
         const allAnimals = await Animal.find({}).exec()
         return allAnimals
@@ -12,24 +19,15 @@ const resolvers = {
         return []
       }
     },
-    animalById: async (parent, {id}, context) => {
+    animalById: async (parent, {id}, {Animal}) => {
       console.log(`animal id : ${id}`)
       const foundAnimal = await Animal.findById(id).exec()
       console.log(`animal found : ${foundAnimal}`)
       return foundAnimal
     },
-    categories: async (parent, args, context) => {
-      try {
-        const allCategories = await Category.find({}).exec()
-        return allCategories
-      } catch (e) {
-        console.log("e", e)
-        return []
-      }
-    },
   },
   Mutation: {
-    addCategory: async (parent, args, context) => {
+    addCategory: async (parent, args, {Category}) => {
       const newCategory = await Category.create({...args})
       console.log(args)
       return newCategory
@@ -37,7 +35,7 @@ const resolvers = {
   },
   Category: {
     id: ({_id, id}) => _id || id,
-    animals: async (parent, args, context) => {
+    animals: async (parent, args, {Animal}) => {
       console.log(parent)
       const animalsInCategory = await Animal.find({category: parent.id})
       return animalsInCategory
@@ -45,7 +43,7 @@ const resolvers = {
   },
   Animal: {
     id: ({_id, id}) => _id || id,
-    category: async (parent, args, context) => {
+    category: async (parent, args, {Category}) => {
       // console.log(parent)
       const categoryForAnimal = await Category.findOne({id: parent.id})
       return categoryForAnimal
@@ -54,6 +52,8 @@ const resolvers = {
 }
 
 module.exports = resolvers
+
+// { Category: Model { category }, Animal: Model { animal } }
 
 /*
 module.exports = {
