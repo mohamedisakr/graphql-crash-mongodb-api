@@ -1,6 +1,6 @@
 const {ApolloServer} = require("apollo-server-express")
 const express = require("express")
-const mongoose = require("mongoose")
+const connect = require("./db-connection")
 const typeDefs = require("./schema")
 const resolvers = require("./resolvers")
 const models = require("./models")
@@ -8,14 +8,7 @@ const models = require("./models")
 const startServer = async () => {
   const app = express()
 
-  const db = await mongoose.connect(
-    "mongodb://localhost:27017/gql-crash",
-    {
-      useUnifiedTopology: true,
-      useNewUrlParser: true,
-    },
-    () => console.log("mongoose connected"),
-  )
+  const db = await connect()
 
   const apolloServer = new ApolloServer({
     typeDefs,
@@ -35,3 +28,12 @@ const startServer = async () => {
 }
 
 startServer()
+
+// const db = await mongoose.connect(
+//   "mongodb://localhost:27017/gql-crash",
+//   {
+//     useUnifiedTopology: true,
+//     useNewUrlParser: true,
+//   },
+//   () => console.log("mongoose connected"),
+// )

@@ -1,4 +1,4 @@
-export const getOne = async (model, id) => {
+module.exports = getOne = (model) => async (id) => {
   try {
     const doc = await model.findOne({_id: id}).lean().exec()
 
@@ -11,7 +11,7 @@ export const getOne = async (model, id) => {
   }
 }
 
-export const getMany = async (model) => {
+module.exports = getMany = async (model) => {
   try {
     const docs = await model.find({}).lean().exec()
     if (!docs) {
@@ -23,7 +23,7 @@ export const getMany = async (model) => {
   }
 }
 
-export const createOne = async (model, newObject) => {
+module.exports = createOne = (model) => async (newObject) => {
   try {
     const doc = await model.create({...newObject})
     return doc
@@ -32,7 +32,7 @@ export const createOne = async (model, newObject) => {
   }
 }
 
-export const updateOne = async (model, id, updateObject) => {
+module.exports = updateOne = (model) => async (id, updateObject) => {
   try {
     const updatedDoc = await model
       .findOneAndUpdate({_id: id}, updateObject, {new: true})
@@ -49,7 +49,7 @@ export const updateOne = async (model, id, updateObject) => {
   }
 }
 
-export const removeOne = async (model, id) => {
+module.exports = removeOne = (model) => async (id) => {
   try {
     const removed = await model.findOneAndRemove({_id: id})
 
@@ -63,7 +63,7 @@ export const removeOne = async (model, id) => {
   }
 }
 
-export const crudControllers = (model) => ({
+module.exports = crudOperation = (model) => ({
   removeOne: removeOne(model),
   updateOne: updateOne(model),
   getMany: getMany(model),
