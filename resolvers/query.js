@@ -5,9 +5,18 @@ const Query = {
     const animals = await Animal.find({}).exec()
     return animals
   },
-
+  categories: async (parent, args, {Category}) => {
+    console.log(Category)
+    try {
+      const allCategories = await Category.find({}).exec()
+      return allCategories
+    } catch (e) {
+      console.error(e)
+      return []
+    }
+  },
   mainCards: (parent, args, {mainCards}) => mainCards,
-  categories: (parent, args, {categories}) => categories,
+
   category: (parent, {slug}, {categories}) => {
     console.log(slug)
     let categoryToFind = categories.find(
