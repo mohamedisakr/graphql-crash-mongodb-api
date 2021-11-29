@@ -1,6 +1,8 @@
 const mongoose = require("mongoose")
 const {Schema, model} = mongoose
 
+require("../db-connection")
+
 const schema = {
   image: {type: String, required: true},
   title: {type: String, required: true},
