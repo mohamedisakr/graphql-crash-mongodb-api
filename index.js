@@ -1,13 +1,13 @@
 const {ApolloServer} = require("apollo-server-express")
 const express = require("express")
-const connect = require("./db-connection")
+// const connect = require("./db-connection")
 const typeDefs = require("./schema")
 const resolvers = require("./resolvers")
 const models = require("./models")
 
 const startServer = async () => {
   const app = express()
-  const db = await connect()
+  // const db = await connect()
 
   const apolloServer = new ApolloServer({
     typeDefs,
